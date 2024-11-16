@@ -32,8 +32,6 @@ services:
       timeout: 3s
     volumes:
       - redis:/data
-    sysctls:
-      - vm.overcommit_memory=1
   server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.10.2}
     restart: unless-stopped
