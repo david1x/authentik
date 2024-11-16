@@ -1,7 +1,7 @@
 ---
 services:
   postgresql:
-    image: docker.io/library/postgres:12-alpine
+    image: docker.io/library/postgres:16-alpine
     container_name: authentik-postgres
     restart: unless-stopped
     healthcheck:
@@ -32,8 +32,10 @@ services:
       timeout: 3s
     volumes:
       - redis:/data
+    sysctls:
+      - vm.overcommit_memory=1
   server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.2.2}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.10.2}
     restart: unless-stopped
     command: server
     environment:
@@ -54,7 +56,7 @@ services:
       - postgresql
       - redis
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.2.2}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.10.2}
     restart: unless-stopped
     command: worker
     environment:
